@@ -21,12 +21,22 @@
     UILabel *title;
 }
 
+- (void) viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+}
+
+- (BOOL) shouldAutorotate {
+    scatterPlotView.frame = CGRectMake(20.0f, 50.0f, self.view.bounds.size.width - 40.0f, self.view.bounds.size.height - 100.0f);
+    title.frame = CGRectMake(20.0f, 10.0f, self.view.bounds.size.width - 40.0f, 30.0f);
+    return YES;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     [self basicViewCustomizations];
 
     scatterPlotView = [[CPTGraphHostingView alloc] initWithFrame:CGRectMake(20.0f, 50.0f, self.view.bounds.size.width - 40.0f, self.view.bounds.size.height - 100.0f)];
+    
     [self.view addSubview:scatterPlotView];
 
     [self buildScatterPlot];
@@ -36,7 +46,7 @@
     [super didReceiveMemoryWarning];
 }
 
--(void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+- (void) didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     scatterPlotView.frame = CGRectMake(20.0f, 50.0f, self.view.bounds.size.width - 40.0f, self.view.bounds.size.height - 100.0f);
     title.frame = CGRectMake(20.0f, 10.0f, self.view.bounds.size.width - 40.0f, 30.0f);
 }
@@ -128,7 +138,7 @@
     CPTPlotSymbol *plotSymbol = [CPTPlotSymbol pentagonPlotSymbol];
     plotSymbol.fill = [CPTFill fillWithColor:[CPTColor blueColor]];
     plotSymbol.lineStyle = symbolLineStyle;
-    plotSymbol.size = CGSizeMake(6.0, 6.0);
+    plotSymbol.size = CGSizeMake(16.0, 16.0);
     scatterPlot.plotSymbol = plotSymbol;
 }
 
@@ -163,19 +173,6 @@
         return [NSNumber numberWithFloat:point.x];
     else 
         return [NSNumber numberWithFloat:point.y];
-}
-
-- (CPTLayer *) dataLabelForPlot:(CPTPlot *)plot recordIndex:(NSUInteger)index {
-    static CPTMutableTextStyle *whiteText = nil;
-    
-    if (!whiteText) {
-        whiteText = [[CPTMutableTextStyle alloc] init];
-        whiteText.color = [CPTColor whiteColor];
-    }
-    
-    CPTTextLayer *newLayer = [[CPTTextLayer alloc] initWithText:[NSString stringWithFormat:@"%lu", (unsigned long)index] style:whiteText];
-    
-    return newLayer;
 }
 
 @end
